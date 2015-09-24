@@ -1,7 +1,9 @@
 {
-    "appKeys": {},
+    "appKeys": {
+        "KEY_TEXT_ALIGN": 0
+    },
     "capabilities": [
-        ""
+        "configurable"
     ],
     "companyName": "sendow",
     "longName": "Sliding Text'",
@@ -32,7 +34,7 @@
         "basalt"
     ],
     "uuid": "1fc1dce0-d6f1-4034-b56e-b5643c78cfa7",
-    "versionLabel": "1.0",
+    "versionLabel": "1.1",
     "watchapp": {
         "watchface": true
     }

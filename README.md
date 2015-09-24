@@ -15,4 +15,4 @@ It uses antialiased Roboto Bold/Light fonts to display the time.
 
 ### Basalt (Pebble Time, Pebble Time Steel)
 
-![](assets/screenshots/basalt/1.png) ![](assets/screenshots/basalt/2.png) ![](assets/screenshots/basalt/3.png)
+![](assets/screenshots/basalt/1.png) ![](assets/screenshots/basalt/2.png) ![](assets/screenshots/basalt/3.png) ![](assets/screenshots/basalt/4.png)

@@ -1,6 +1,9 @@
 #include <pebble.h>
 #include "num2words.h"
 #include "fontmap.h"
+#include "config.h"
+  
+#define PBL_IF_RECT_ELSE(x, y) x
 
 typedef enum {
   MOVING_IN,
@@ -44,6 +47,10 @@ typedef struct {
     uint8_t next_minutes;
   } render_state;
 
+  struct Config {
+    uint8_t text_align;
+  } config;
+
 } SlidingTextData;
 
 SlidingTextData *s_data;
@@ -52,7 +59,13 @@ static void update_proc_sliding_row(Layer *layer, GContext *ctx) {
   RowData *row_data = (RowData*)layer_get_data(layer);
   if (row_data && row_data->text) {
     graphics_context_set_compositing_mode(ctx, GCompOpSet);
-    draw_text(ctx, row_data->text, row_data->font);  
+    GPoint offset = GPoint(PBL_IF_RECT_ELSE(0, 18), 0);
+    if (PBL_IF_RECT_ELSE(s_data->config.text_align == 2, s_data->config.text_align == 0 || s_data->config.text_align == 2)) {
+      GRect bounds = layer_get_bounds(layer);
+      int16_t text_width = measure_text(row_data->text, row_data->font);
+      offset = GPoint((bounds.size.w - text_width) / 2, 0);
+    }
+    draw_text(ctx, row_data->text, row_data->font, offset);  
   }
 }
 
@@ -198,12 +211,22 @@ static void make_animation() {
   animation_schedule(s_data->animation);
 }
 
+static void read_conf_and_force_animations() {
+  s_data->config.text_align = config_get_text_align();
+
+  s_data->last_hour = -1;
+  s_data->last_minute = -1;
+  make_animation();
+}
+
 static void handle_minute_tick(struct tm *tick_time, TimeUnits units_changed) {
   make_animation();
 }
 
 static void handle_deinit(void) {
   deinit_fonts();
+
+  config_close();
 
   tick_timer_service_unsubscribe();
   free(s_data);
@@ -225,18 +248,21 @@ static void handle_init() {
   Layer *window_layer = window_get_root_layer(data->window);
 
   const int16_t width = layer_get_frame(window_layer).size.w;
-  init_sliding_row(data, &data->rows[0], GRect(0, 27, width, 41), 6, BOLD_TYPE);
+  init_sliding_row(data, &data->rows[0], GRect(0, 27 + PBL_IF_RECT_ELSE(0, 6), width, 41), 6, BOLD_TYPE);
   layer_add_child(window_layer, data->rows[0].layer);
 
-  init_sliding_row(data, &data->rows[1], GRect(0, 63, width, 41), 3, LIGHT_TYPE);
+  init_sliding_row(data, &data->rows[1], GRect(0, 63 + PBL_IF_RECT_ELSE(0, 6), width, 41), 3, LIGHT_TYPE);
   layer_add_child(window_layer, data->rows[1].layer);
 
-  init_sliding_row(data, &data->rows[2], GRect(0, 99, width, 41), 0, LIGHT_TYPE);
+  init_sliding_row(data, &data->rows[2], GRect(0, 99 + PBL_IF_RECT_ELSE(0, 6), width, 41), 0, LIGHT_TYPE);
   layer_add_child(window_layer, data->rows[2].layer);
 
   layer_mark_dirty(window_layer);
 
-  make_animation();
+  config_register_changed(read_conf_and_force_animations);
+  config_open();
+
+  read_conf_and_force_animations();
 
   tick_timer_service_subscribe(MINUTE_UNIT, handle_minute_tick);
 
