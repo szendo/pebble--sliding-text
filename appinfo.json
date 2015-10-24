@@ -31,10 +31,11 @@
     "sdkVersion": "3",
     "shortName": "Sliding Text'",
     "targetPlatforms": [
-        "basalt"
+        "basalt",
+        "chalk"
     ],
     "uuid": "1fc1dce0-d6f1-4034-b56e-b5643c78cfa7",
-    "versionLabel": "1.2",
+    "versionLabel": "1.4",
     "watchapp": {
         "watchface": true
     }
