@@ -1,0 +1,47 @@
+{
+    "author": "sendow",
+    "dependencies": {},
+    "keywords": [],
+    "name": "sliding-text",
+    "pebble": {
+        "capabilities": [
+            "configurable"
+        ],
+        "displayName": "Sliding Text'",
+        "enableMultiJS": false,
+        "messageKeys": {
+            "KEY_TEXT_ALIGN": 0
+        },
+        "projectType": "native",
+        "resources": {
+            "media": [
+                {
+                    "file": "images/menu_icon.png",
+                    "menuIcon": true,
+                    "name": "MENU_ICON",
+                    "type": "bitmap"
+                },
+                {
+                    "file": "images/roboto-light.png",
+                    "name": "IMAGE_ROBOTO_LIGHT",
+                    "type": "bitmap"
+                },
+                {
+                    "file": "images/roboto-bold.png",
+                    "name": "IMAGE_ROBOTO_BOLD",
+                    "type": "bitmap"
+                }
+            ]
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "basalt",
+            "chalk"
+        ],
+        "uuid": "1fc1dce0-d6f1-4034-b56e-b5643c78cfa7",
+        "watchapp": {
+            "watchface": true
+        }
+    },
+    "version": "1.4.0"
+}
